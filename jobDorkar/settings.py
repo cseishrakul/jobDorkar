@@ -3,7 +3,7 @@ from datetime import timedelta
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-yusa)r18xidwo-4*-os)&=zqpzjm@q(7qollqpqv*)x*2t)-#e'
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [".vercel.app",'127.0.0.1']
 
