@@ -1,5 +1,6 @@
 import os
 from datetime import timedelta
+from decouple import config
 from pathlib import Path
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-yusa)r18xidwo-4*-os)&=zqpzjm@q(7qollqpqv*)x*2t)-#e'
@@ -59,10 +60,22 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'jobDorkar.wsgi.app'
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        'NAME' : config('dbname'),
+        'USER' : config('user'),
+        'PASSWORD' : config('password'),
+        'HOST' : config('host'),
+        'PORT' : config('port')
+        
     }
 }
 

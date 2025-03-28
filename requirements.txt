@@ -6,7 +6,9 @@ drf-writable-nested==0.7.2
 drf-yasg==1.21.10
 inflection==0.5.1
 packaging==24.2
+psycopg2-binary==2.9.10
 PyJWT==2.9.0
+python-decouple==3.8
 pytz==2025.2
 PyYAML==6.0.2
 sqlparse==0.5.3
