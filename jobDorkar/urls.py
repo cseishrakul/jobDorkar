@@ -1,5 +1,6 @@
 from django.contrib import admin
-from django.urls import path,include
+from django.urls import path, include
+from django.shortcuts import redirect
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -8,6 +9,9 @@ from rest_framework_simplejwt.views import (
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from rest_framework import permissions
+
+def redirect_to_api(request):
+    return redirect('/api')
 
 
 schema_view = get_schema_view(
@@ -24,6 +28,7 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
+    path('', redirect_to_api),
     path('admin/', admin.site.urls),
     path('api/accounts/', include('accounts.urls')),
     path('api/', include('jobs.urls')),
