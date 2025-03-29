@@ -1,8 +1,16 @@
 from django.urls import path
-from .views import UserRegisterView,verify_email,LoginView
+from .views import (
+    UserRegistrationAPIView,
+    VerifyEmailAPIView,
+    UserLoginAPIView,
+    UserLogoutAPIView,
+    UserProfileAPIView
+)
 
 urlpatterns = [
-    path('register/', UserRegisterView.as_view(), name='register'),
-     path('verify/<str:token>/', verify_email, name='verify-email'),
-     path('login/', LoginView.as_view(), name='login'),
+    path('register/', UserRegistrationAPIView.as_view(), name='register'),
+    path('verify-email/<str:token>/', VerifyEmailAPIView.as_view(), name='verify-email'),
+    path('login/', UserLoginAPIView.as_view(), name='login'),
+    path('logout/', UserLogoutAPIView.as_view(), name='logout'),
+    path('profile/', UserProfileAPIView.as_view(), name='profile'),
 ]

@@ -183,16 +183,22 @@ class JobApplicationStatusUpdateView(APIView):
             return Response({"error": "Application not found"}, status=status.HTTP_404_NOT_FOUND)
         
 class ReviewViewSet(viewsets.ModelViewSet):
-    queryset = Review.objects.all()
+    queryset = Review.objects.none()
     serializer_class = ReviewSerializer
 
+    def get_queryset(self):
+        queryset = Review.objects.select_related('job_seeker', 'employer')
+        employer_id = self.request.query_params.get('employer')
+        if employer_id:
+            queryset = queryset.filter(employer_id=employer_id)
+        return queryset
+
     def perform_create(self, serializer):
-        if serializer.validated_data['job_seeker'] == serializer.validated_data['employer']:
+        job_seeker = serializer.validated_data.get('job_seeker')
+        employer = serializer.validated_data.get('employer')
+
+        if job_seeker == employer:
             raise serializers.ValidationError("You cannot review yourself.")
+
         serializer.save()
 
-    def list(self, request, *args, **kwargs):
-        employer_id = request.query_params.get('employer', None)
-        if employer_id:
-            self.queryset = self.queryset.filter(employer_id=employer_id)
-        return super().list(request, *args, **kwargs)
