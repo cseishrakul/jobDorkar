@@ -9,7 +9,7 @@
     "routes":[
         {
             "src":"/(.*)",
-            "dest":"jobDorker/wsgi.py"
+            "dest":"jobDorkar/wsgi.py"
         }
     ]
 }
