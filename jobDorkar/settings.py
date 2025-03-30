@@ -6,7 +6,7 @@ import cloudinary
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-p@#^*(=w*4lp@8-$$jpujrsdfdkrdmm!46!f)%oi_0(*^mh37r'
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [".vercel.app","127.0.0.1"]
 AUTH_USER_MODEL = 'accounts.User'
@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'accounts',
     'jobs',
+    "debug_toolbar",
 ]
 
 MIDDLEWARE = [
@@ -41,6 +42,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
+]
+
+INTERNAL_IPS = [
+    "127.0.0.1",
 ]
 
 ROOT_URLCONF = 'jobDorkar.urls'
