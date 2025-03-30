@@ -1,0 +1,15 @@
+{
+    "builds":[
+        {
+            "src":"jobDorkar/wsgi.py",
+            "use": "@vercel/python",
+            "config":{"maxLambdaSize":"15mb","runtime":"pyhton3.11.3"}
+        }
+    ],
+    "routes":[
+        {
+            "src":"/(.*)",
+            "dest":"jobDorker/wsgi.py"
+        }
+    ]
+}
