@@ -6,7 +6,7 @@ import cloudinary
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-p@#^*(=w*4lp@8-$$jpujrsdfdkrdmm!46!f)%oi_0(*^mh37r'
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [".vercel.app","127.0.0.1"]
 AUTH_USER_MODEL = 'accounts.User'
