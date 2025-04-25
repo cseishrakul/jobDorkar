@@ -6,6 +6,6 @@ urlpatterns = [
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
     path('auth/jwt/create', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/admin-dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
+    path('admin-dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
 ]
     
