@@ -90,7 +90,8 @@ DJOSER = {
     'ACTIVATION_URL': 'activate/{uid}/{token}/',
     'SERIALIZERS': {
         'user_create': 'accounts.serializers.CustomUserCreateSerializer',
-        'current_user':'accounts.serializers.CustomUserSerializer'
+        'current_user':'accounts.serializers.CustomUserSerializer',
+        # 'activation': 'accounts.serializers.CustomActivationEmailSerializer',
     },
 }
 
