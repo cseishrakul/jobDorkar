@@ -14,7 +14,7 @@ class CustomUserCreateSerializer(UserCreateSerializer):
 
 class CustomUserSerializer(UserSerializer):
     class Meta(UserSerializer.Meta):
-        fields = ('id', 'username', 'email', 'role')
+        fields = ('id', 'username', 'email', 'role','is_staff')
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
@@ -25,6 +25,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             "username": user.username,
             "email": user.email,
             "role": user.role,
+            "is_staff": user.is_staff
         }
         return data
 
