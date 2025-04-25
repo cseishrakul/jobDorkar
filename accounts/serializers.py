@@ -2,6 +2,7 @@ from djoser.serializers import UserCreateSerializer,UserSerializer
 from rest_framework import serializers
 from .models import User
 from jobs.models import Job
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 class CustomUserCreateSerializer(UserCreateSerializer):
     role = serializers.ChoiceField(choices=User.ROLE_CHOICES, required=True)
@@ -14,6 +15,14 @@ class CustomUserCreateSerializer(UserCreateSerializer):
 class CustomUserSerializer(UserSerializer):
     class Meta(UserSerializer.Meta):
         fields = ('id', 'username', 'email', 'role')
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        user = self.user
+        data['role'] = user.role
+        return data
+
         
 
 class JobSerializer(serializers.ModelSerializer):
