@@ -10,7 +10,7 @@ urlpatterns = [
     path('auth/jwt/create', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('admin-dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
     # path('activate/<str:uidb64>/<str:token>/', activate_account, name='activate_account'),
-    path('activate/<uidb64>/<token>/', activate_account, name='activate'),
+    # path('activate/<uidb64>/<token>/', activate_account, name='activate'),
 
 
 ]

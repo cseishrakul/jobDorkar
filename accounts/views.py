@@ -26,16 +26,16 @@ class AdminDashboardView(APIView):
 
 
 # Custom email varification
-def activate_account(request, uidb64, token):
-    try:
-        uid = urlsafe_base64_decode(uidb64).decode('utf-8')
-        user = get_user_model().objects.get(pk=uid)
+# def activate_account(request, uidb64, token):
+#     try:
+#         uid = urlsafe_base64_decode(uidb64).decode('utf-8')
+#         user = get_user_model().objects.get(pk=uid)
 
-        if default_token_generator.check_token(user, token):
-            user.is_active = True
-            user.save()
-            return redirect('login')  # Redirect to the login page after activation
-        else:
-            return HttpResponse('Invalid activation link.', status=400)
-    except Exception as e:
-        return HttpResponse(f"Error: {str(e)}", status=400)
+#         if default_token_generator.check_token(user, token):
+#             user.is_active = True
+#             user.save()
+#             return redirect('login')  # Redirect to the login page after activation
+#         else:
+#             return HttpResponse('Invalid activation link.', status=400)
+#     except Exception as e:
+#         return HttpResponse(f"Error: {str(e)}", status=400)
