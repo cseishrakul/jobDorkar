@@ -30,25 +30,9 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return data
 
 
-        
-
 class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
         fields = ['id', 'title', 'description', 'requirements', 'location', 'posted_by', 'date_posted']
         read_only_fields = ['posted_by', 'date_posted']
 
-
-
-# Email activation
-# class CustomActivationEmailSerializer(DjoserSerializers.UserCreateSerializer):
-#     def get_activation_url(self, user, request):
-#         """
-#         Get full activation URL including the scheme (http or https) and domain.
-#         """
-#         domain = get_current_site(request).domain
-#         protocol = 'https' if request.is_secure() else 'http'
-#         uid = urlsafe_base64_encode(str(user.pk).encode()).decode()
-#         token = default_token_generator.make_token(user)
-
-#         return f"{protocol}://{domain}/activate/{uid}/{token}/"
