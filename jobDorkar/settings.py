@@ -91,7 +91,6 @@ DJOSER = {
     'SERIALIZERS': {
         'user_create': 'accounts.serializers.CustomUserCreateSerializer',
         'current_user':'accounts.serializers.CustomUserSerializer',
-        # 'activation': 'accounts.serializers.CustomActivationEmailSerializer',
     },
 }
 

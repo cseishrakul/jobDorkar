@@ -27,7 +27,7 @@ class AdminDashboardView(APIView):
 # Custom email varification
 class ActivateUserView(View):
     def get(self, request, uid, token):
-        backend_url = 'https://job-dorkar.vercel.app/auth/users/activation/'
+        backend_url = 'http://localhost:8000/auth/users/activation/'
         response = requests.post(backend_url, json={'uid': uid, 'token': token})
 
         if response.status_code == 204:
