@@ -19,3 +19,5 @@ class AdminDashboardView(APIView):
             return Response({"users": [user.username for user in users]})
         else:
             return Response({"error": "You are not authorized to view this page"}, status=403)
+        
+

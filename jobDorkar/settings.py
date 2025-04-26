@@ -86,11 +86,14 @@ SIMPLE_JWT = {
     "TOKEN_OBTAIN_SERIALIZER": "accounts.serializers.CustomTokenObtainPairSerializer",
 }
 DJOSER = {
+    'EMAIL_FRONTEND_PROTOCOL':config('FRONTEND_PROTOCOL'),
+    'EMAIL_FRONTEND_DOMAIN':config('FRONTEND_DOMAIN'),
+    'EMAIL_FRONTEND_SITE_NAME':'JobDorkar',
     'SEND_ACTIVATION_EMAIL': True, 
     'ACTIVATION_URL': 'activate/{uid}/{token}/',
     'SERIALIZERS': {
         'user_create': 'accounts.serializers.CustomUserCreateSerializer',
-        'current_user':'accounts.serializers.CustomUserSerializer',
+        'current_user':'accounts.serializers.CustomUserSerializer'
     },
 }
 
