@@ -1,7 +1,7 @@
 from django.urls import path, include
 from .views import CustomTokenObtainPairView 
 from .views import AdminDashboardView
-# from .views import activate_account
+from .views import ActivateUserView
 
 
 urlpatterns = [
@@ -9,8 +9,7 @@ urlpatterns = [
     path('auth/', include('djoser.urls.jwt')),
     path('auth/jwt/create', CustomTokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('admin-dashboard/', AdminDashboardView.as_view(), name='admin-dashboard'),
-    # path('activate/<str:uidb64>/<str:token>/', activate_account, name='activate_account'),
-    # path('activate/<uidb64>/<token>/', activate_account, name='activate'),
+    path('activate/<uid>/<token>/', ActivateUserView.as_view(), name='activate_user'),
 
 
 ]
