@@ -1,7 +1,7 @@
 from django.urls import path, include
 from .views import CustomTokenObtainPairView 
 from .views import AdminDashboardView
-from .views import activate_account
+# from .views import activate_account
 
 
 urlpatterns = [
