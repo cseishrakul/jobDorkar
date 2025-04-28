@@ -3,6 +3,10 @@ from rest_framework import serializers
 from .models import User
 from jobs.models import Job
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.contrib.auth import get_user_model
+
+
+User = get_user_model()
 
 class CustomUserCreateSerializer(UserCreateSerializer):
     role = serializers.ChoiceField(choices=User.ROLE_CHOICES, required=True)
@@ -25,7 +29,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             "username": user.username,
             "email": user.email,
             "role": user.role,
-            "is_staff": user.is_staff
+            "is_staff": user.is_staff,
         }
         return data
 
@@ -36,3 +40,8 @@ class JobSerializer(serializers.ModelSerializer):
         fields = ['id', 'title', 'description', 'requirements', 'location', 'posted_by', 'date_posted']
         read_only_fields = ['posted_by', 'date_posted']
 
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = '__all__'  # or list specific fields if you want
