@@ -34,12 +34,14 @@ class JobCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
     
     def perform_create(self, serializer):
-        user = self.request.user
-        if user.role != "employer":
-            return Response({"error": "Only employers can create job listings."}, status=status.HTTP_403_FORBIDDEN)
-        company_name = user.company_name
-        company_logo = user.company_logo
-        serializer.save(posted_by=user, company_name=company_name, company_logo=company_logo)
+        company_name = self.request.data.get('company_name', '')
+        company_logo = self.request.FILES.get('company_logo', None)
+        serializer.save(
+            posted_by=self.request.user, 
+            company_name=company_name, 
+            company_logo=company_logo
+        )
+
 
         
 # Job Delete
