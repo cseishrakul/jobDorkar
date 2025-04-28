@@ -1,10 +1,11 @@
 from django.urls import path, include
-from .views import JobCreateView,JobApplicationCreateView,JobListView,EmployerDashboardView, JobSeekerDashboardView,UpdateProfileView,TrackApplicationsView,JobCategoryView,UpdateJobApplicationStatusView,ReviewCreateView,ReviewListView,DeleteJob
+from .views import JobCreateView,JobApplicationCreateView,JobListView,EmployerDashboardView, JobSeekerDashboardView,UpdateProfileView,TrackApplicationsView,JobCategoryView,UpdateJobApplicationStatusView,ReviewCreateView,ReviewListView,DeleteJob,JobUpdateView
 
 urlpatterns = [
     path('', JobListView.as_view(), name='job-list'),
     path('create/', JobCreateView.as_view(), name='job-create'),
     path('api/jobs/delete/<int:job_id>/', DeleteJob.as_view(), name='delete-job'),
+    path('api/jobs/update/<int:pk>/', JobUpdateView.as_view(), name='job-update'),
     path("dashboard/employer/", EmployerDashboardView.as_view(), name="employer-dashboard"),
     path("dashboard/jobseeker/", JobSeekerDashboardView.as_view(), name="jobseeker-dashboard"),
     path("dashboard/profile/update/", UpdateProfileView.as_view(), name="update-profile"),

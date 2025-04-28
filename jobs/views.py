@@ -49,6 +49,18 @@ class DeleteJob(APIView):
             return Response({"message": "Job deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
         except Job.DoesNotExist:
             return Response({"message": "Job not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+#  Job Update
+class JobUpdateView(UpdateAPIView):
+    queryset = Job.objects.all()
+    serializer_class = JobSerializer
+    permission_classes = [IsAuthenticated]
+
+    def update(self, request, *args, **kwargs):
+        job = self.get_object()
+        if job.posted_by != request.user:
+            return Response({"detail": "You do not have permission to edit this job."}, status=status.HTTP_403_FORBIDDEN)
+        return super().update(request, *args, **kwargs)
 
 class JobApplicationCreateView(generics.CreateAPIView):
     queryset = JobApplication.objects.all()
