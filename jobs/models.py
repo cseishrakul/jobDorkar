@@ -18,9 +18,12 @@ class Job(models.Model):
     posted_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='posted_jobs')
     category = models.ForeignKey(JobCategory, on_delete=models.SET_NULL, null=True, blank=True, related_name='jobs')
     date_posted = models.DateTimeField(auto_now_add=True)
+    company_name = models.CharField(max_length=255, blank=True, null=True)
+    company_logo = CloudinaryField('image', blank=True, null=True)
 
     def __str__(self):
         return self.title
+
 
 class JobApplication(models.Model):
     applicant = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
