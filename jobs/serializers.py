@@ -9,10 +9,11 @@ class JobCategorySerializer(serializers.ModelSerializer):
 
 class JobSerializer(serializers.ModelSerializer):
     category_name = serializers.CharField(source='category.name', read_only=True)
-
+    posted_by = serializers.PrimaryKeyRelatedField(read_only=True)
     class Meta:
         model = Job
-        fields = ['id', 'title', 'description', 'requirements', 'location', 'category', 'category_name', 'date_posted']
+        fields = ['id', 'title', 'description', 'requirements', 'location', 'category', 'category_name', 'date_posted', 'posted_by']
+
 
 
 class JobApplicationSerializer(serializers.ModelSerializer):
