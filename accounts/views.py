@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
-from .serializers import UserSerializer
+from .serializers import CustomUserDetailSerializer
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
@@ -31,7 +31,7 @@ class AdminDashboardView(APIView):
 
 
 class UserDetailByIdView(generics.GenericAPIView):
-    serializer_class = UserSerializer
+    serializer_class = CustomUserDetailSerializer
 
     def get(self, request, user_id):
         try:

@@ -41,7 +41,7 @@ class JobSerializer(serializers.ModelSerializer):
         read_only_fields = ['posted_by', 'date_posted']
 
 
-class UserSerializer(serializers.ModelSerializer):
+class CustomUserDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'  # or list specific fields if you want
+        fields = '__all__'
