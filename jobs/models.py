@@ -19,7 +19,7 @@ class Job(models.Model):
     category = models.ForeignKey(JobCategory, on_delete=models.SET_NULL, null=True, blank=True, related_name='jobs')
     date_posted = models.DateTimeField(auto_now_add=True)
     company_name = models.CharField(max_length=255, blank=True, null=True)
-    company_logo = CloudinaryField('image', blank=True, null=True)
+    company_logo = CloudinaryField('image', resource_type='raw', blank=True, null=True)
 
     def __str__(self):
         return self.title
