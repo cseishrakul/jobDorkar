@@ -37,6 +37,18 @@ class JobCreateView(generics.CreateAPIView):
         if user.role != "employer":
             return Response({"error": "Only employers can create job listings."}, status=status.HTTP_403_FORBIDDEN)
         serializer.save(posted_by=user)
+        
+# Job Delete
+class DeleteJob(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, job_id):
+        try:
+            job = Job.objects.get(id=job_id, posted_by=request.user)
+            job.delete()
+            return Response({"message": "Job deleted successfully"}, status=status.HTTP_204_NO_CONTENT)
+        except Job.DoesNotExist:
+            return Response({"message": "Job not found"}, status=status.HTTP_404_NOT_FOUND)
 
 class JobApplicationCreateView(generics.CreateAPIView):
     queryset = JobApplication.objects.all()
