@@ -10,7 +10,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated,AllowAny
 from django.core.mail import send_mail
 from django.conf import settings
-from sslcommerz_lib import sslcommerz
+from sslcommerz_lib import SSLCOMMERZ
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -18,6 +18,7 @@ from datetime import datetime, timedelta
 import time
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
+from sslcommerz import SSLCOMMERZ
 
 
 class JobCategoryView(generics.ListCreateAPIView):
@@ -230,52 +231,54 @@ class ReviewListView(generics.ListAPIView):
 # SSLCommercez
 @login_required
 def promote_job(request, job_id):
-    # Assuming you have a Job model and it has is_promoted field
-    job = Job.objects.get(id=job_id, employer=request.user)
+    # Fetch job object or return error if not found or not the employer
+    job = get_object_or_404(Job, id=job_id, employer=request.user)
 
     # Check if the job is already promoted
     if job.is_promoted:
         return JsonResponse({'message': 'This job is already promoted.'}, status=400)
 
-    # Generate a unique transaction ID
+    # Create unique order ID based on job ID and timestamp
     order_id = f"job_promotion_{job.id}_{int(time.time())}"
 
-    # Payment data
+    # Payment data required by SSLCommerz
     payment_data = {
         'store_id': settings.SSLCOMMERZ_STORE_ID,
-        'store_password': settings.SSLCOMMERZ_STORE_PASSWORD,
-        'total_amount': 100,  # Set your promotion price
-        'currency': 'BDT',
+        'store_pass': settings.SSLCOMMERZ_STORE_PASSWORD,
+        'total_amount': 100,  # Replace with actual promotion price if dynamic
+        'currency': 'BDT',  # Ensure you're using the correct currency code
         'tran_id': order_id,
-        'cus_name': request.user.username,
-        'cus_email': request.user.email,
-        'cus_phone': '01700000000',
         'success_url': f'{request.scheme}://{request.get_host()}/payment/success/{job.id}',
         'fail_url': f'{request.scheme}://{request.get_host()}/payment/fail/{job.id}',
         'cancel_url': f'{request.scheme}://{request.get_host()}/payment/cancel/{job.id}',
+        'cus_name': request.user.username,
+        'cus_email': request.user.email,
+        'cus_add1': 'Dhaka',  # You can add more fields as necessary
+        'cus_phone': '01700000000',  # Replace with actual phone number from request or user profile
     }
 
     try:
-        # Create SSLCommerz instance for sandbox
-        ssl_commerz = sslcommerz.SSLCommerz(
-            store_id=settings.SSLCOMMERZ_STORE_ID,
-            store_password=settings.SSLCOMMERZ_STORE_PASSWORD,
-            is_sandbox=True  # Sandbox environment for testing
-        )
-        
-        # Send payment request
-        response = ssl_commerz.payment_request(payment_data)
+        # Initialize the SSLCommerz object with sandbox or live details
+        sslcz = SSLCOMMERZ({
+            'store_id': settings.SSLCOMMERZ_STORE_ID,
+            'store_pass': settings.SSLCOMMERZ_STORE_PASSWORD,
+            'issandbox': False  # Change to False in production
+        })
 
-        # If response is successful, redirect to SSLCommerz payment page
-        if response['status'] == 'SUCCESS':
-            payment_url = response['GatewayPageURL']
-            return HttpResponseRedirect(payment_url)
+        # Create the payment session
+        response = sslcz.createSession(payment_data)
 
-        return JsonResponse({'error': 'Payment initiation failed.'}, status=400)
-    
+        # Check the response from SSLCommerz
+        if response.get('status') == 'SUCCESS':
+            # Redirect to the payment gateway
+            return HttpResponseRedirect(response['GatewayPageURL'])
+        else:
+            # If the payment initiation failed, return an error message
+            return JsonResponse({'error': 'Payment initiation failed.'}, status=400)
+
     except Exception as e:
-        return JsonResponse({'error': str(e)}, status=400)
-    
+        # Catch and log any errors from SSLCommerz or connection issues
+        return JsonResponse({'error': f'An error occurred: {str(e)}'}, status=500)
 
 
 def payment_success(request, job_id):
