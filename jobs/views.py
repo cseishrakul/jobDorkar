@@ -251,5 +251,7 @@ def initiate_payment(request):
 
     response = sslcz.createSession(post_body) # API response
     print(response)
-    # Need to redirect user to response['GatewayPageURL']
-    return Response(response)
+    
+    if response.get('status') == 'SUCCESS':
+        return Response({"payment_url": response['GatewayPageURL']})
+    return Response({"error":"Payment initiation failed"},status=status.HTTP_400_BAD_REQUEST)
