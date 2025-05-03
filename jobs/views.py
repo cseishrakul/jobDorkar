@@ -277,5 +277,11 @@ def initiate_payment(request):
 @api_view(['POST'])
 def payment_success(request):
     job_id = request.data.get("tran_id").split('_')[1]
-    job = Job.objects.get(id=job_id)
+    try:
+        job = Job.objects.get(id=job_id)
+        job.is_promoted = True
+        job.save()
+    except Job.DoesNotExist:
+        return Response({"error": "Job not found"}, status=status.HTTP_404_NOT_FOUND)
+
     return redirect("http://localhost:5173/dashboard/payment/success/")
