@@ -10,7 +10,7 @@ from .serializers import CustomUserDetailSerializer
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Job, JobCategory, JobApplication
+from jobs.models import Job, JobCategory, JobApplication
 
 
 User = get_user_model()
