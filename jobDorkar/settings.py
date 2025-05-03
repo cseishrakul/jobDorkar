@@ -164,4 +164,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 # SSlCommercez
-BACKEND_URL = config("BACKEND_URL")

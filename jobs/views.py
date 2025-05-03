@@ -245,7 +245,7 @@ def initiate_payment(request):
         'total_amount': 200,
         'currency': "BDT",
         'tran_id': f"trx_{job_id}",
-        'success_url':"http://localhost:5173/dashboard/payment/success/",
+        'success_url':"https://job-dorkar.vercel.app/api/jobs/payment/success/",
         'fail_url': "http://localhost:5173/dashboard/payment/fail/",
         'cancel_url': "http://localhost:5173/dashboard/",
         'emi_option': 0,
