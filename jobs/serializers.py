@@ -24,7 +24,7 @@ class JobApplicationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = JobApplication
-        fields = ['id', 'job', 'job_title', 'employer', 'resume', 'resume_url', 'cover_letter', 'status', 'applied_at']
+        fields = ['id', 'job', 'job_title', 'employer','applicant_id', 'resume', 'resume_url', 'cover_letter', 'status', 'applied_at']
 
     def get_resume_url(self, obj):
         """Return Cloudinary URL for resume."""
