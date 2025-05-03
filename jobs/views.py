@@ -16,6 +16,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from datetime import datetime, timedelta
 import time
+from django.shortcuts import get_object_or_404
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class JobCategoryView(generics.ListCreateAPIView):
