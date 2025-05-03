@@ -13,7 +13,8 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework.decorators import api_view
-from sslcommerz_lib import SSLCOMMERZ 
+from sslcommerz_lib import SSLCOMMERZ
+from django.shortcuts import redirect
 
 class JobCategoryView(generics.ListCreateAPIView):
     queryset = JobCategory.objects.all()
@@ -275,4 +276,7 @@ def initiate_payment(request):
 
 @api_view(['POST'])
 def payment_success(request):
-    print(request.data)
+    job_id = request.data.get("tran_id").split('_')[1]
+    job = Job.objects.get(id=job_id)
+    print(job)
+    return redirect()
