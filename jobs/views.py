@@ -10,7 +10,6 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated,AllowAny
 from django.core.mail import send_mail
 from django.conf import settings
-from sslcommerz_lib import SSLCOMMERZ
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -277,9 +276,7 @@ def promote_job(request, job_id):
             return JsonResponse({'error': 'Payment initiation failed.'}, status=400)
 
     except Exception as e:
-        # Catch and log any errors from SSLCommerz or connection issues
         return JsonResponse({'error': f'An error occurred: {str(e)}'}, status=500)
-
 
 def payment_success(request, job_id):
     # Handle success logic (e.g., mark job as promoted)
