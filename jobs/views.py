@@ -225,20 +225,18 @@ class ReviewListView(generics.ListAPIView):
 # SSLCommercez
 @api_view(['POST'])
 def initiate_payment(request):
-    user = request.user
-    job_id = request.data.get("JobId")
     settings = { 'store_id': 'jobdo68162c3a4bfb4', 'store_pass': 'jobdo68162c3a4bfb4@ssl', 'issandbox': True }
     sslcz = SSLCOMMERZ(settings)
     post_body = {}
-    post_body['total_amount'] = '200'
+    post_body['total_amount'] = 100.26
     post_body['currency'] = "BDT"
-    post_body['tran_id'] = f"trx_{job_id}"
-    post_body['success_url'] = "http://localhost:5173/dashboard/payment/success/"
-    post_body['fail_url'] = "http://localhost:5173/dashboard/payment/fail/"
-    post_body['cancel_url'] = "http://localhost:5173/dashboard/"
+    post_body['tran_id'] = "12345"
+    post_body['success_url'] = "your success url"
+    post_body['fail_url'] = "your fail url"
+    post_body['cancel_url'] = "your cancel url"
     post_body['emi_option'] = 0
-    post_body['cus_name'] = f"{user.first_name} {user.last_name}"
-    post_body['cus_email'] = user.email
+    post_body['cus_name'] = "test"
+    post_body['cus_email'] = "test@test.com"
     post_body['cus_phone'] = "01700000000"
     post_body['cus_add1'] = "customer address"
     post_body['cus_city'] = "Dhaka"
@@ -246,11 +244,13 @@ def initiate_payment(request):
     post_body['shipping_method'] = "NO"
     post_body['multi_card_name'] = ""
     post_body['num_of_item'] = 1
-    post_body['product_name'] = "Job Post"
-    post_body['product_category'] = "Job"
+    post_body['product_name'] = "Test"
+    post_body['product_category'] = "Test Category"
     post_body['product_profile'] = "general"
 
-    response = sslcz.createSession(post_body)
+
+    response = sslcz.createSession(post_body) # API response
+    print(response)
     
     if response.get('status') == 'SUCCESS':
         return Response({"payment_url": response['GatewayPageURL']})
