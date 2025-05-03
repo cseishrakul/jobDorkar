@@ -10,14 +10,8 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated,AllowAny
 from django.core.mail import send_mail
 from django.conf import settings
-from django.http import JsonResponse, HttpResponseRedirect
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-from datetime import datetime, timedelta
-import time
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import ObjectDoesNotExist
-from sslcommerz import SSLCOMMERZ
 
 
 class JobCategoryView(generics.ListCreateAPIView):
@@ -228,69 +222,3 @@ class ReviewListView(generics.ListAPIView):
 
 
 # SSLCommercez
-@login_required
-def promote_job(request, job_id):
-    # Fetch job object or return error if not found or not the employer
-    job = get_object_or_404(Job, id=job_id, employer=request.user)
-
-    # Check if the job is already promoted
-    if job.is_promoted:
-        return JsonResponse({'message': 'This job is already promoted.'}, status=400)
-
-    # Create unique order ID based on job ID and timestamp
-    order_id = f"job_promotion_{job.id}_{int(time.time())}"
-
-    # Payment data required by SSLCommerz
-    payment_data = {
-        'store_id': settings.SSLCOMMERZ_STORE_ID,
-        'store_pass': settings.SSLCOMMERZ_STORE_PASSWORD,
-        'total_amount': 100,  # Replace with actual promotion price if dynamic
-        'currency': 'BDT',  # Ensure you're using the correct currency code
-        'tran_id': order_id,
-        'success_url': f'{request.scheme}://{request.get_host()}/payment/success/{job.id}',
-        'fail_url': f'{request.scheme}://{request.get_host()}/payment/fail/{job.id}',
-        'cancel_url': f'{request.scheme}://{request.get_host()}/payment/cancel/{job.id}',
-        'cus_name': request.user.username,
-        'cus_email': request.user.email,
-        'cus_add1': 'Dhaka',  # You can add more fields as necessary
-        'cus_phone': '01700000000',  # Replace with actual phone number from request or user profile
-    }
-
-    try:
-        # Initialize the SSLCommerz object with sandbox or live details
-        sslcz = SSLCOMMERZ({
-            'store_id': settings.SSLCOMMERZ_STORE_ID,
-            'store_pass': settings.SSLCOMMERZ_STORE_PASSWORD,
-            'issandbox': False  # Change to False in production
-        })
-
-        # Create the payment session
-        response = sslcz.createSession(payment_data)
-
-        # Check the response from SSLCommerz
-        if response.get('status') == 'SUCCESS':
-            # Redirect to the payment gateway
-            return HttpResponseRedirect(response['GatewayPageURL'])
-        else:
-            # If the payment initiation failed, return an error message
-            return JsonResponse({'error': 'Payment initiation failed.'}, status=400)
-
-    except Exception as e:
-        return JsonResponse({'error': f'An error occurred: {str(e)}'}, status=500)
-
-def payment_success(request, job_id):
-    # Handle success logic (e.g., mark job as promoted)
-    job = Job.objects.get(id=job_id)
-    job.is_promoted = True
-    job.save()
-    return render(request, 'payment/success.html', {'job': job})
-
-def payment_fail(request, job_id):
-    # Handle failure logic
-    job = Job.objects.get(id=job_id)
-    return render(request, 'payment/fail.html', {'job': job})
-
-def payment_cancel(request, job_id):
-    # Handle cancellation
-    job = Job.objects.get(id=job_id)
-    return render(request, 'payment/cancel.html', {'job': job})
