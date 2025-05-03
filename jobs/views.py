@@ -228,3 +228,69 @@ class ReviewListView(generics.ListAPIView):
 
 
 # SSLCommercez
+@login_required
+def promote_job(request, job_id):
+    # Assuming you have a Job model and it has is_promoted field
+    job = Job.objects.get(id=job_id, employer=request.user)
+
+    # Check if the job is already promoted
+    if job.is_promoted:
+        return JsonResponse({'message': 'This job is already promoted.'}, status=400)
+
+    # Generate a unique transaction ID
+    order_id = f"job_promotion_{job.id}_{int(time.time())}"
+
+    # Payment data
+    payment_data = {
+        'store_id': settings.SSLCOMMERZ_STORE_ID,
+        'store_password': settings.SSLCOMMERZ_STORE_PASSWORD,
+        'total_amount': 100,  # Set your promotion price
+        'currency': 'BDT',
+        'tran_id': order_id,
+        'cus_name': request.user.username,
+        'cus_email': request.user.email,
+        'cus_phone': '01700000000',
+        'success_url': f'{request.scheme}://{request.get_host()}/payment/success/{job.id}',
+        'fail_url': f'{request.scheme}://{request.get_host()}/payment/fail/{job.id}',
+        'cancel_url': f'{request.scheme}://{request.get_host()}/payment/cancel/{job.id}',
+    }
+
+    try:
+        # Create SSLCommerz instance for sandbox
+        ssl_commerz = sslcommerz.SSLCommerz(
+            store_id=settings.SSLCOMMERZ_STORE_ID,
+            store_password=settings.SSLCOMMERZ_STORE_PASSWORD,
+            is_sandbox=True  # Sandbox environment for testing
+        )
+        
+        # Send payment request
+        response = ssl_commerz.payment_request(payment_data)
+
+        # If response is successful, redirect to SSLCommerz payment page
+        if response['status'] == 'SUCCESS':
+            payment_url = response['GatewayPageURL']
+            return HttpResponseRedirect(payment_url)
+
+        return JsonResponse({'error': 'Payment initiation failed.'}, status=400)
+    
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
+    
+
+
+def payment_success(request, job_id):
+    # Handle success logic (e.g., mark job as promoted)
+    job = Job.objects.get(id=job_id)
+    job.is_promoted = True
+    job.save()
+    return render(request, 'payment/success.html', {'job': job})
+
+def payment_fail(request, job_id):
+    # Handle failure logic
+    job = Job.objects.get(id=job_id)
+    return render(request, 'payment/fail.html', {'job': job})
+
+def payment_cancel(request, job_id):
+    # Handle cancellation
+    job = Job.objects.get(id=job_id)
+    return render(request, 'payment/cancel.html', {'job': job})
