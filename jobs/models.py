@@ -20,7 +20,9 @@ class Job(models.Model):
     date_posted = models.DateTimeField(auto_now_add=True)
     company_name = models.CharField(max_length=255, blank=True, null=True)
     company_logo = CloudinaryField('image', resource_type='raw', blank=True, null=True)
-
+    is_promoted = models.BooleanField(default=False)
+    employer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    
     def __str__(self):
         return self.title
 

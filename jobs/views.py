@@ -10,7 +10,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated,AllowAny
 from django.core.mail import send_mail
 from django.conf import settings
-import sslcommerz
+from sslcommerz_lib import SSLCommerz
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
@@ -257,7 +257,7 @@ def promote_job(request, job_id):
 
     try:
         # Create SSLCommerz instance for sandbox
-        ssl_commerz = sslcommerz.SSLCommerz(
+        ssl_commerz = SSLCommerz(
             store_id=settings.SSLCOMMERZ_STORE_ID,
             store_password=settings.SSLCOMMERZ_STORE_PASSWORD,
             is_sandbox=True  # Sandbox environment for testing

@@ -166,4 +166,4 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # SSlCommercez
 SSLCOMMERZ_STORE_ID = 'jobdo68162c3a4bfb4'
 SSLCOMMERZ_STORE_PASSWORD = 'jobdo68162c3a4bfb4@ssl'
-SSLCOMMERZ_SANDBOX_API_URL = 'https://sandbox.sslcommerz.com/gwprocess/v4/api.php'
+SSLCOMMERZ_SANDBOX_API_URL = 'https://sandbox.sslcommerz.com/gwprocess/v3/api.php'
