@@ -225,33 +225,49 @@ class ReviewListView(generics.ListAPIView):
 # SSLCommercez
 @api_view(['POST'])
 def initiate_payment(request):
-    settings = { 'store_id': 'jobdo68162c3a4bfb4', 'store_pass': 'jobdo68162c3a4bfb4@ssl', 'issandbox': True }
+    job_id = request.data.get("JobId")
+    if not job_id:
+        return Response({"error": "Job ID is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+    user = request.user
+    if not user or user.is_anonymous:
+        return Response({"error": "User must be logged in"}, status=status.HTTP_401_UNAUTHORIZED)
+
+    settings = {
+        'store_id': 'jobdo68162c3a4bfb4',
+        'store_pass': 'jobdo68162c3a4bfb4@ssl',
+        'issandbox': True
+    }
+
     sslcz = SSLCOMMERZ(settings)
-    post_body = {}
-    post_body['total_amount'] = 100.26
-    post_body['currency'] = "BDT"
-    post_body['tran_id'] = "12345"
-    post_body['success_url'] = "your success url"
-    post_body['fail_url'] = "your fail url"
-    post_body['cancel_url'] = "your cancel url"
-    post_body['emi_option'] = 0
-    post_body['cus_name'] = "test"
-    post_body['cus_email'] = "test@test.com"
-    post_body['cus_phone'] = "01700000000"
-    post_body['cus_add1'] = "customer address"
-    post_body['cus_city'] = "Dhaka"
-    post_body['cus_country'] = "Bangladesh"
-    post_body['shipping_method'] = "NO"
-    post_body['multi_card_name'] = ""
-    post_body['num_of_item'] = 1
-    post_body['product_name'] = "Test"
-    post_body['product_category'] = "Test Category"
-    post_body['product_profile'] = "general"
 
+    post_body = {
+        'total_amount': 200,
+        'currency': "BDT",
+        'tran_id': f"trx_{job_id}",
+        'success_url': "http://localhost:5173/dashboard/payment/success/",
+        'fail_url': "http://localhost:5173/dashboard/payment/fail/",
+        'cancel_url': "http://localhost:5173/dashboard/",
+        'emi_option': 0,
+        'cus_name': f"{user.first_name} {user.last_name}",
+        'cus_email': user.email,
+        'cus_phone': "01700000000",
+        'cus_add1': "customer address",
+        'cus_city': "Dhaka",
+        'cus_country': "Bangladesh",
+        'shipping_method': "NO",
+        'multi_card_name': "",
+        'num_of_item': 1,
+        'product_name': "Job Post",
+        'product_category': "Job",
+        'product_profile': "general"
+    }
 
-    response = sslcz.createSession(post_body) # API response
-    print(response)
-    
-    if response.get('status') == 'SUCCESS':
-        return Response({"payment_url": response['GatewayPageURL']})
-    return Response({"error":"Payment initiation failed"},status=status.HTTP_400_BAD_REQUEST)
+    try:
+        response = sslcz.createSession(post_body)
+        print(response)
+        if response.get('status') == 'SUCCESS':
+            return Response({"payment_url": response['GatewayPageURL']})
+        return Response({"error": "Payment initiation failed"}, status=status.HTTP_400_BAD_REQUEST)
+    except Exception as e:
+        return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
