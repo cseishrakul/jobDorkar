@@ -1,5 +1,5 @@
 from django.urls import path, include
-from .views import JobCreateView,JobApplicationCreateView,JobListView,EmployerDashboardView, JobSeekerDashboardView,UpdateProfileView,TrackApplicationsView,JobCategoryView,UpdateJobApplicationStatusView,ReviewCreateView,ReviewListView,DeleteJob,JobUpdateView,initiate_payment,payment_success
+from .views import JobCreateView,JobApplicationCreateView,JobListView,EmployerDashboardView, JobSeekerDashboardView,UpdateProfileView,TrackApplicationsView,JobCategoryView,UpdateJobApplicationStatusView,ReviewCreateView,ReviewListView,DeleteJob,JobUpdateView,initiate_payment,payment_success,payment_cancel,payment_failed
 
 urlpatterns = [
     path('', JobListView.as_view(), name='job-list'),
@@ -20,5 +20,7 @@ urlpatterns = [
     
     # Payment
     path("payment/initiate/",initiate_payment,name="initiate-payment"),
-    path("payment/success/", payment_success,name="payment-success")
+    path("payment/success/", payment_success,name="payment-success"),
+    path("payment/cancel/", payment_cancel,name="payment-cancel"),
+    path("payment/failed/", payment_failed,name="payment-failed")
 ]

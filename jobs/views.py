@@ -285,3 +285,8 @@ def payment_success(request):
         return Response({"error": "Job not found"}, status=status.HTTP_404_NOT_FOUND)
 
     return redirect("http://localhost:5173/dashboard/payment/success/")
+
+def payment_cancel(request):
+    return redirect("http://localhost:5173/dashboard")
+def payment_failed(request):
+    return redirect("http://localhost:5173/dashboard")
