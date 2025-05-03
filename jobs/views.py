@@ -278,5 +278,4 @@ def initiate_payment(request):
 def payment_success(request):
     job_id = request.data.get("tran_id").split('_')[1]
     job = Job.objects.get(id=job_id)
-    print(job)
-    return redirect()
+    return redirect("http://localhost:5173/dashboard/payment/success/")
