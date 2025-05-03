@@ -1,6 +1,5 @@
 from django.urls import path, include
 from .views import JobCreateView,JobApplicationCreateView,JobListView,EmployerDashboardView, JobSeekerDashboardView,UpdateProfileView,TrackApplicationsView,JobCategoryView,UpdateJobApplicationStatusView,ReviewCreateView,ReviewListView,DeleteJob,JobUpdateView
-from . import views
 
 urlpatterns = [
     path('', JobListView.as_view(), name='job-list'),
@@ -20,8 +19,5 @@ urlpatterns = [
     path('reviews/<int:employer_id>/', ReviewListView.as_view(), name='list-reviews'),
     
     # Payment
-    path('promote_job/<int:job_id>/', views.promote_job, name='promote_job'),
-    path('payment/success/<int:job_id>/', views.payment_success, name='payment_success'),
-    path('payment/fail/<int:job_id>/', views.payment_fail, name='payment_fail'),
-    path('payment/cancel/<int:job_id>/', views.payment_cancel, name='payment_cancel'),
+    
 ]
