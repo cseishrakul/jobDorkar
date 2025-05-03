@@ -245,7 +245,7 @@ def initiate_payment(request):
         'total_amount': 200,
         'currency': "BDT",
         'tran_id': f"trx_{job_id}",
-        'success_url': "http://localhost:5173/dashboard/payment/success/",
+        'success_url':"https://job-dorkar.vercel.app/api/jobs/payment/success/",
         'fail_url': "http://localhost:5173/dashboard/payment/fail/",
         'cancel_url': "http://localhost:5173/dashboard/",
         'emi_option': 0,
@@ -271,3 +271,8 @@ def initiate_payment(request):
         return Response({"error": "Payment initiation failed"}, status=status.HTTP_400_BAD_REQUEST)
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+def payment_success(request):
+    print(request.data)
