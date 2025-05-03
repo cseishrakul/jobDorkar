@@ -252,3 +252,4 @@ def initiate_payment(request):
     response = sslcz.createSession(post_body) # API response
     print(response)
     # Need to redirect user to response['GatewayPageURL']
+    return Response("Payment Url")
