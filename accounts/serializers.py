@@ -1,7 +1,7 @@
 from djoser.serializers import UserCreateSerializer,UserSerializer
 from rest_framework import serializers
 from .models import User
-from jobs.models import Job
+from jobs.models import Job,JobApplication,JobCategory
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth import get_user_model
 
@@ -34,11 +34,31 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         return data
 
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'is_staff']
+
+# Job Category Serializer
+class JobCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JobCategory
+        fields = '__all__'
+
+
 class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
         fields = ['id', 'title', 'description', 'requirements', 'location', 'posted_by', 'date_posted']
         read_only_fields = ['posted_by', 'date_posted']
+
+class JobApplicationSerializer(serializers.ModelSerializer):
+    applicant = UserSerializer()  # Include applicant details
+    job = JobSerializer()         # Include job details
+
+    class Meta:
+        model = JobApplication
+        fields = '__all__'
 
 
 class CustomUserDetailSerializer(serializers.ModelSerializer):

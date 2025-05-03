@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .serializers import CustomTokenObtainPairSerializer
+from .serializers import CustomTokenObtainPairSerializer,UserSerializer, JobSerializer, JobCategorySerializer, JobApplicationSerializer
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -10,6 +10,7 @@ from .serializers import CustomUserDetailSerializer
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework import status
+from .models import Job, JobCategory, JobApplication
 
 
 User = get_user_model()
@@ -21,9 +22,23 @@ class AdminDashboardView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        if request.user.is_staff:  # Check if the user is a superadmin
+        if request.user.is_staff:  # Only for superadmin
             users = User.objects.all()
-            return Response({"users": [user.username for user in users]})
+            jobs = Job.objects.all()
+            categories = JobCategory.objects.all()
+            applications = JobApplication.objects.all()
+
+            users_data = UserSerializer(users, many=True).data
+            jobs_data = JobSerializer(jobs, many=True).data
+            categories_data = JobCategorySerializer(categories, many=True).data
+            applications_data = JobApplicationSerializer(applications, many=True).data
+
+            return Response({
+                "users": users_data,
+                "jobs": jobs_data,
+                "categories": categories_data,
+                "applications": applications_data
+            })
         else:
             return Response({"error": "You are not authorized to view this page"}, status=403)
         
