@@ -226,12 +226,11 @@ class ReviewListView(generics.ListAPIView):
 @api_view(['POST'])
 def initiate_payment(request):
     user = request.user
-    amount = request.data.get('amount')
     job_id = request.data.get("JobId")
     settings = { 'store_id': 'jobdo68162c3a4bfb4', 'store_pass': 'jobdo68162c3a4bfb4@ssl', 'issandbox': True }
     sslcz = SSLCOMMERZ(settings)
     post_body = {}
-    post_body['total_amount'] = amount
+    post_body['total_amount'] = '200'
     post_body['currency'] = "BDT"
     post_body['tran_id'] = "trx_{job_id}"
     post_body['success_url'] = "http://localhost:5173/dashboard/payment/success/"
