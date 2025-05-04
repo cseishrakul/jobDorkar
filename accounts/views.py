@@ -22,7 +22,7 @@ class AdminDashboardView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        if request.user.is_staff:  # Only for superadmin
+        if request.user.is_staff:
             users = User.objects.all()
             jobs = Job.objects.all()
             categories = JobCategory.objects.all()
@@ -42,9 +42,6 @@ class AdminDashboardView(APIView):
         else:
             return Response({"error": "You are not authorized to view this page"}, status=403)
         
-
-
-
 class UserDetailByIdView(generics.GenericAPIView):
     serializer_class = CustomUserDetailSerializer
 

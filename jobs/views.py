@@ -45,8 +45,6 @@ class JobCreateView(generics.CreateAPIView):
             company_name=company_name, 
             company_logo=company_logo
         )
-
-
         
 # Job Delete
 class DeleteJob(APIView):

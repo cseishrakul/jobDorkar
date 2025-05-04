@@ -162,5 +162,3 @@ MEDIA_ROOT = BASE_DIR / 'resumes'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
-# SSlCommercez

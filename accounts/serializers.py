@@ -39,7 +39,6 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'email', 'first_name', 'last_name', 'is_staff']
 
-# Job Category Serializer
 class JobCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = JobCategory
@@ -53,8 +52,8 @@ class JobSerializer(serializers.ModelSerializer):
         read_only_fields = ['posted_by', 'date_posted']
 
 class JobApplicationSerializer(serializers.ModelSerializer):
-    applicant = UserSerializer()  # Include applicant details
-    job = JobSerializer()         # Include job details
+    applicant = UserSerializer()
+    job = JobSerializer()
 
     class Meta:
         model = JobApplication
