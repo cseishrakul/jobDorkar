@@ -245,8 +245,8 @@ def initiate_payment(request):
         'currency': "BDT",
         'tran_id': f"trx_{job_id}",
         'success_url':"https://job-dorkar.vercel.app/api/jobs/payment/success/",
-        'fail_url': "http://localhost:5173/dashboard/payment/fail/",
-        'cancel_url': "http://localhost:5173/dashboard/",
+        'fail_url': "https://job-dorkar-react.vercel.app/dashboard/payment/fail/",
+        'cancel_url': "https://job-dorkar-react.vercel.app/dashboard/",
         'emi_option': 0,
         'cus_name': f"{user.first_name} {user.last_name}",
         'cus_email': user.email,
@@ -282,9 +282,9 @@ def payment_success(request):
     except Job.DoesNotExist:
         return Response({"error": "Job not found"}, status=status.HTTP_404_NOT_FOUND)
 
-    return redirect("http://localhost:5173/dashboard/payment/success/")
+    return redirect("https://job-dorkar-react.vercel.app/dashboard/payment/success/")
 
 def payment_cancel(request):
-    return redirect("http://localhost:5173/dashboard")
+    return redirect("https://job-dorkar-react.vercel.app/dashboard")
 def payment_failed(request):
-    return redirect("http://localhost:5173/dashboard")
+    return redirect("https://job-dorkar-react.vercel.app/dashboard")
