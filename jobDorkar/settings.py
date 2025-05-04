@@ -96,8 +96,7 @@ DJOSER = {
         'current_user':'accounts.serializers.CustomUserSerializer'
     },
 }
-
-
+# Database
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
