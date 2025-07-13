@@ -1,5 +1,7 @@
 # 🖥️ JobDorkar — Django Backend
 
+![Api View](home.png)
+
 ## 📄 Description  
 This is the **backend API** for the full-stack job portal application **JobDorkar**. Built with **Django** and **Django REST Framework**, this backend provides secure authentication, role-based access control, job posting, applicant tracking, and resume handling functionalities. It connects to a **PostgreSQL** database and serves data to the [React frontend](https://github.com/cseishrakul/jobDorkar-react).
 
